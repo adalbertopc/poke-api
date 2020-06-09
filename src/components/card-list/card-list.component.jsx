@@ -1,18 +1,13 @@
 import React from 'react';
+import { Card } from '../card/card.component';
+import './card-list.styles.css';
 
 export const CardList = (props) => {
-	// console.log(props.pokemons);
-	const { pokemons } = props;
 	return (
-		<div className="card-list">
-			{pokemons.map((pokemon) => {
-				console.log(pokemon);
-				return <h1>{pokemon.name}</h1>;
+		<div className='card-list'>
+			{props.pokemons.map((pokemon) => {
+				return <Card key={pokemon.id} pokemon={pokemon} />;
 			})}
-
-			<h1>Hola</h1>
 		</div>
 	);
-
-	// return props.pokemons.map((pokemon) => <h1 key={pokemon.id}>{pokemon.name}</h1>);
 };

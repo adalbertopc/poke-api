@@ -5,7 +5,6 @@ import './App.css';
 export class App extends Component {
 	constructor() {
 		super();
-
 		this.state = {
 			pokemonArr: [],
 		};
@@ -15,32 +14,43 @@ export class App extends Component {
 		console.log(this.state.pokemonArr);
 	};
 
-	async componentDidMount() {
-		const allPokemon = [];
+	componentDidMount() {
 		fetch('https://pokeapi.co/api/v2/pokemon?limit=151')
 			.then((response) => response.json())
-			.then((pokemons) =>
+			// .then((pokemons) => {
+			// 	for (const pokemon of pokemons.results) {
+			// 		fetch(pokemon.url)
+			// 			.then(async (response) => await response.json())
+			// 			.then((datosPoke) =>
+			// 				this.setState({
+			// 					pokemonArr: [...this.state.pokemonArr, datosPoke],
+			// 				})
+			// 			);
+			// 	}
+			// });
+
+			.then((pokemons) => {
 				pokemons.results.forEach((pokemon) => {
-					fetch(pokemon.url)
-						.then((response) => response.json())
-						.then((datosPoke) => allPokemon.push(datosPoke));
-				})
-			);
-		this.setState({ pokemonArr: allPokemon });
+					this.fetchPokemon(pokemon.url);
+				});
+			});
 	}
 
+	fetchPokemon = (url) => {
+		fetch(url)
+			.then((response) => response.json())
+			.then((datosPoke) =>
+				this.setState({
+					pokemonArr: [...this.state.pokemonArr, datosPoke],
+				})
+			);
+	};
+
 	render() {
-		const { pokemonArr } = this.state;
-		const pokemons = pokemonArr.map((pokemon) => console.log(pokemon));
 		return (
-			<div className="App">
-				{/* <CardList pokemons={this.state.pokemonArr} /> */}
+			<div className='App'>
 				<button onClick={this.imprimir}>Imprimir</button>
-				<ul>
-					{this.state.pokemonArr.map((pokemon) => (
-						<li> {pokemon.name}</li>
-					))}
-				</ul>
+				<CardList pokemons={this.state.pokemonArr} />
 			</div>
 		);
 	}
