@@ -10,8 +10,9 @@ export const Card = (props) => {
 			</div>
 			<div className='info'>
 				<h1 className='name'>{props.pokemon.name}</h1>
-				<Stats stats={props.pokemon.stats} />
-				<p>Peso: {props.pokemon.height}</p>
+				<Stats key={props.pokemon.id} stats={props.pokemon.stats} />
+				<p>Altura: {props.pokemon.height}cm</p>
+				<p>Peso: {props.pokemon.weight}kg</p>
 			</div>
 			<div className='info-extra'>
 				<span className='numero-dex'>#{props.pokemon.id}</span>
