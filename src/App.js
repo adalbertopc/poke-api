@@ -17,23 +17,22 @@ export class App extends Component {
 	};
 
 	componentDidMount() {
-		fetch('https://pokeapi.co/api/v2/pokemon?limit=151')
-			.then((response) => response.json())
-			.then((pokemons) => {
-				pokemons.results.forEach((pokemon) => {
-					this.fetchPokemon(pokemon.url);
-				});
-			});
+		this.fetchPokemon();
 	}
 
-	fetchPokemon = (url) => {
-		fetch(url)
-			.then((response) => response.json())
-			.then((datosPoke) => {
-				this.setState({
-					pokemonArr: [...this.state.pokemonArr, datosPoke],
-				});
+	fetchPokemon = async () => {
+		const pokemonFetch = await fetch('https://pokeapi.co/api/v2/pokemon?limit=151');
+		const pokemonFetchResponse = await pokemonFetch.json();
+		const pokemonFetchJson = await pokemonFetchResponse;
+		const results = pokemonFetchJson.results;
+		for (const result of results) {
+			const pokeFetch = await fetch(result.url);
+			const pokeFetchResponse = await pokeFetch.json();
+			const resultado = pokeFetchResponse;
+			this.setState({
+				pokemonArr: [...this.state.pokemonArr, resultado],
 			});
+		}
 	};
 
 	handleChange = (e) => this.setState({ search: e.target.value });
@@ -41,7 +40,6 @@ export class App extends Component {
 		const filtro = this.state.pokemonArr.filter((pokemon) => {
 			return pokemon.name.toLowerCase().includes(this.state.search.toLowerCase());
 		});
-		console.log('render');
 
 		return (
 			<div className='App'>
